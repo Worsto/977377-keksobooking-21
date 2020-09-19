@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Олег Назаров](https://up.htmlacademy.ru/javascript/21/user/977377).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Кудрявцев](https://up.htmlacademy.ru/javascript/21/user/166603).
 
 ---
 
