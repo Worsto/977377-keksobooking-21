@@ -6,25 +6,7 @@ const CHECK_TIMES = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 const PICTURES = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 
-function addZeros(n, needLength) {
-  needLength = needLength || 2;
-  n = String(n);
-  while (n.length < needLength) {
-    n = `0` + n;
-  }
-  return n;
-}
-
-function shuffleArray(array) {
-  let j; let temp;
-  for (let i = array.length - 1; i > 0; i--) {
-    j = Math.floor(Math.random() * (i + 1));
-    temp = array[j];
-    array[j] = array[i];
-    array[i] = temp;
-  }
-  return array;
-}
+const formatNumber = num => num > 9 ? num : `0${num}`;
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max + 1 - min) + min);
@@ -34,42 +16,31 @@ function getRandomFromArray(array) {
   return array[getRandomNumber(0, array.length - 1)];
 }
 
-function getRandomsFromArray(array) {
-  let arr = [];
-  for (let i = array.length - 1; i >= 0; i--) {
-    if (Math.round(Math.random()) > 0) {
-      arr.push(array[i]);
-    }
-  }
-
-  return arr;
-}
-
-function createArrayOfAvatarNumbers(amount) {
-  const array = [];
-  for (let i = 1; i <= amount; i++) {
-    array.push(addZeros(i));
-  }
-  shuffleArray(array);
-  return array;
-}
-
+const getRandomsFromArray = array => array.filter(() => {return Math.random() > 0.5})
 
 function createOfferMok(n) {
   const locX = getRandomNumber(31, 1169);
   const locY = getRandomNumber(130, 630);
+  const roomsAmount = {
+    min: 1,
+    max: 4
+  }
+  const guestsAmount = {
+    min: 1,
+    max: 3
+  }
 
   return {
     author: {
-      avatar: `img/avatars/user${avatarNumbers[n]}.png`
+      avatar: `img/avatars/user${formatNumber(n)}.png`
     },
     offer: {
       title: `Заголовок предложения`,
       address: `${locX}, ${locY}`,
       price: getRandomNumber(1, 120) * 1000,
       type: getRandomFromArray(APARTMENT_TYPES),
-      rooms: getRandomNumber(1, 4),
-      guests: getRandomNumber(1, 3),
+      rooms: getRandomNumber(roomsAmount.min, roomsAmount.max),
+      guests: getRandomNumber(guestsAmount.min, guestsAmount.max),
       checkin: getRandomFromArray(CHECK_TIMES),
       checkout: getRandomFromArray(CHECK_TIMES),
       features: getRandomsFromArray(FEATURES),
@@ -86,7 +57,7 @@ function createOfferMok(n) {
 function createOffers(amount) {
   const offers = [];
   for (let i = 0; i < amount; i++) {
-    offers.push(createOfferMok(i));
+    offers.push(createOfferMok(i + 1));
   }
 
   return offers;
@@ -119,7 +90,6 @@ const map = document.querySelector(`.map`);
 function showMap(element) {
   element.classList.remove(`map--faded`);
 }
-const avatarNumbers = createArrayOfAvatarNumbers(OFFERS_QUANTITY);
 const offers = createOffers(OFFERS_QUANTITY);
 showMap(map);
 map.appendChild(createPinsList(offers));
