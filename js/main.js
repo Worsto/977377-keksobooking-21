@@ -6,7 +6,7 @@ const CHECK_TIMES = [`12:00`, `13:00`, `14:00`];
 const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
 const PICTURES = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
 
-const formatNumber = num => num > 9 ? num : `0${num}`;
+const formatNumber = (num) => num > 9 ? num : `0${num}`;
 
 function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max + 1 - min) + min);
@@ -16,7 +16,9 @@ function getRandomFromArray(array) {
   return array[getRandomNumber(0, array.length - 1)];
 }
 
-const getRandomsFromArray = array => array.filter(() => {return Math.random() > 0.5})
+const getRandomsFromArray = (array) => array.filter(() => {
+  return Math.random() > 0.5;
+});
 
 function createOfferMok(n) {
   const locX = getRandomNumber(31, 1169);
@@ -24,11 +26,11 @@ function createOfferMok(n) {
   const roomsAmount = {
     min: 1,
     max: 4
-  }
+  };
   const guestsAmount = {
     min: 1,
     max: 3
-  }
+  };
 
   return {
     author: {
