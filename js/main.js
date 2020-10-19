@@ -66,12 +66,11 @@ function createOffers(amount) {
 }
 
 function renderPin(offer) {
-  const pinElement = pin.cloneNode(true);
+  const pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.querySelector(`.map__pin`).setAttribute(`style`, `left: ${offer.location.x - 25}px; top: ${offer.location.y - 35}px;`);
-  pinElement.querySelector(`.map__pin`).querySelector(`img`).setAttribute(`src`, offer.author.avatar);
-  pinElement.querySelector(`.map__pin`).querySelector(`img`).setAttribute(`alt`, offer.offer.title);
-
+  pinElement.setAttribute(`style`, `left: ${offer.location.x - 25}px; top: ${offer.location.y - 35}px;`);
+  pinElement.querySelector(`img`).setAttribute(`src`, offer.author.avatar);
+  pinElement.querySelector(`img`).setAttribute(`alt`, offer.offer.title);
 
   return pinElement;
 }
@@ -85,13 +84,41 @@ function createPinsList(array) {
   return fragment;
 }
 
-const pin = document.querySelector(`#pin`)
-  .content;
+const pinTemplate = document.querySelector(`#pin`)
+  .content.querySelector(`.map__pin`);
 const map = document.querySelector(`.map`);
+const mapPins = document.querySelector(`.map__pins`);
 
 function showMap(element) {
   element.classList.remove(`map--faded`);
 }
 const offers = createOffers(OFFERS_QUANTITY);
 showMap(map);
-map.appendChild(createPinsList(offers));
+mapPins.appendChild(createPinsList(offers));
+
+/*
+На основе первого по порядку элемента из сгенерированного массива и шаблона #card создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
+
+const cardTemplate = document.querySelector(`#card`)
+  .content.querySelector(`.map__card`);
+
+const vocabulary = {
+   flat: "Квартира",
+   bungalow: "Бунгало",
+   house: "Дом",
+   palace: "Дворец"
+}
+
+- Выведите заголовок объявления offer.title в заголовок .popup__title.
+- Выведите адрес offer.address в блок .popup__text--address.
+- Выведите цену offer.price в блок .popup__text--price строкой вида {{offer.price}}₽/ночь. Например, 5200₽/ночь.
+- В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalow, Дом для house, Дворец для palace.
+- Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
+- Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}. Например, заезд после 14:00, выезд до 12:00.
+- В список .popup__features выведите все доступные удобства в объявлении.
+- В блок .popup__description выведите описание объекта недвижимости offer.description.
+- В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
+- Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
+
+Если данных для заполнения не хватает, соответствующий блок в карточке скрывается.
+*/
