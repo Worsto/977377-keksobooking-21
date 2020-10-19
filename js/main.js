@@ -1,10 +1,36 @@
 'use strict';
 
 const OFFERS_QUANTITY = 8;
-const APARTMENT_TYPES = [`palace`, `flat`, `house`, `bungalow`];
-const CHECK_TIMES = [`12:00`, `13:00`, `14:00`];
-const FEATURES = [`wifi`, `dishwasher`, `parking`, `washer`, `elevator`, `conditioner`];
-const PICTURES = [`http://o0.github.io/assets/images/tokyo/hotel1.jpg`, `http://o0.github.io/assets/images/tokyo/hotel2.jpg`, `http://o0.github.io/assets/images/tokyo/hotel3.jpg`];
+const APARTMENT_TYPES = [
+  `palace`,
+  `flat`,
+  `house`,
+  `bungalow`
+];
+const CHECK_TIMES = [
+  `12:00`,
+  `13:00`,
+  `14:00`
+];
+const FEATURES = [
+  `wifi`,
+  `dishwasher`,
+  `parking`,
+  `washer`,
+  `elevator`,
+  `conditioner`
+];
+const PICTURES = [
+  `http://o0.github.io/assets/images/tokyo/hotel1.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
+  `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
+];
+const VOCABULARY = {
+  flat: `Квартира`,
+  bungalow: `Бунгало`,
+  house: `Дом`,
+  palace: `Дворец`
+};
 
 const formatNumber = (num) => num > 9 ? num : `0${num}`;
 
@@ -39,7 +65,7 @@ function createOfferMok(n) {
     offer: {
       title: `Заголовок предложения`,
       address: `${locX}, ${locY}`,
-      price: getRandomNumber(1, 120) * 1000,
+      price: getRandomNumber(10, 120) * 1000,
       type: getRandomFromArray(APARTMENT_TYPES),
       rooms: getRandomNumber(roomsAmount.min, roomsAmount.max),
       guests: getRandomNumber(guestsAmount.min, guestsAmount.max),
@@ -65,14 +91,57 @@ function createOffers(amount) {
   return offers;
 }
 
-function renderPin(offer) {
+function renderPin(element) {
   const pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.setAttribute(`style`, `left: ${offer.location.x - 25}px; top: ${offer.location.y - 35}px;`);
-  pinElement.querySelector(`img`).setAttribute(`src`, offer.author.avatar);
-  pinElement.querySelector(`img`).setAttribute(`alt`, offer.offer.title);
+  pinElement.setAttribute(`style`, `left: ${element.location.x - 25}px; top: ${element.location.y - 35}px;`);
+  pinElement.querySelector(`img`).setAttribute(`src`, element.author.avatar);
+  pinElement.querySelector(`img`).setAttribute(`alt`, element.offer.title);
 
   return pinElement;
+}
+
+function createFeature(feature) {
+  const listItem = document.createElement(`li`);
+  listItem.classList.add(`popup__feature`);
+  listItem.classList.add(`popup__feature--${feature}`);
+
+  return listItem;
+}
+
+function createImgWithSource(src) {
+  const image = cardTemplate.querySelector(`.popup__photo`).cloneNode();
+  image.setAttribute(`src`, src);
+
+  return image;
+}
+
+function createList(func, array) {
+  let list = document.createDocumentFragment();
+  for (let i = 0; i < array.length; i++) {
+    list.appendChild(func(array[i]));
+  }
+
+  return list;
+}
+
+function renderCard(element) {
+  const cardElement = cardTemplate.cloneNode(true);
+
+  cardElement.querySelector(`.popup__title`).textContent = element.offer.title;
+  cardElement.querySelector(`.popup__text--address`).textContent = element.offer.address;
+  cardElement.querySelector(`.popup__text--price`).textContent = `${element.offer.price}₽/ночь`;
+  cardElement.querySelector(`.popup__type`).textContent = VOCABULARY[element.offer.type];
+  cardElement.querySelector(`.popup__text--capacity`).textContent = `${element.offer.rooms} комнаты для ${element.offer.guests} гостей`;
+  cardElement.querySelector(`.popup__text--time`).textContent = `Заезд после ${element.offer.checkin}, выезд до ${element.offer.checkout}`;
+  cardElement.querySelector(`.popup__features`).innerHTML = ``;
+  cardElement.querySelector(`.popup__features`).appendChild(createList(createFeature, element.offer.features));
+  cardElement.querySelector(`.popup__description`).textContent = element.offer.description;
+  cardElement.querySelector(`.popup__photos`).innerHTML = ``;
+  cardElement.querySelector(`.popup__photos`).appendChild(createList(createImgWithSource, element.offer.photos));
+  cardElement.querySelector(`.popup__avatar`).setAttribute(`src`, element.author.avatar);
+
+  return cardElement;
 }
 
 function createPinsList(array) {
@@ -86,39 +155,16 @@ function createPinsList(array) {
 
 const pinTemplate = document.querySelector(`#pin`)
   .content.querySelector(`.map__pin`);
+const cardTemplate = document.querySelector(`#card`)
+  .content.querySelector(`.map__card`);
 const map = document.querySelector(`.map`);
 const mapPins = document.querySelector(`.map__pins`);
 
-function showMap(element) {
-  element.classList.remove(`map--faded`);
+function showMap() {
+  map.classList.remove(`map--faded`);
 }
 const offers = createOffers(OFFERS_QUANTITY);
-showMap(map);
+showMap();
 mapPins.appendChild(createPinsList(offers));
 
-/*
-На основе первого по порядку элемента из сгенерированного массива и шаблона #card создайте DOM-элемент объявления (карточка объявления), заполните его данными из объекта:
-
-const cardTemplate = document.querySelector(`#card`)
-  .content.querySelector(`.map__card`);
-
-const vocabulary = {
-   flat: "Квартира",
-   bungalow: "Бунгало",
-   house: "Дом",
-   palace: "Дворец"
-}
-
-- Выведите заголовок объявления offer.title в заголовок .popup__title.
-- Выведите адрес offer.address в блок .popup__text--address.
-- Выведите цену offer.price в блок .popup__text--price строкой вида {{offer.price}}₽/ночь. Например, 5200₽/ночь.
-- В блок .popup__type выведите тип жилья offer.type: Квартира для flat, Бунгало для bungalow, Дом для house, Дворец для palace.
-- Выведите количество гостей и комнат offer.rooms и offer.guests в блок .popup__text--capacity строкой вида {{offer.rooms}} комнаты для {{offer.guests}} гостей. Например, 2 комнаты для 3 гостей.
-- Время заезда и выезда offer.checkin и offer.checkout в блок .popup__text--time строкой вида Заезд после {{offer.checkin}}, выезд до {{offer.checkout}}. Например, заезд после 14:00, выезд до 12:00.
-- В список .popup__features выведите все доступные удобства в объявлении.
-- В блок .popup__description выведите описание объекта недвижимости offer.description.
-- В блок .popup__photos выведите все фотографии из списка offer.photos. Каждая из строк массива photos должна записываться как src соответствующего изображения.
-- Замените src у аватарки пользователя — изображения, которое записано в .popup__avatar — на значения поля author.avatar отрисовываемого объекта.
-
-Если данных для заполнения не хватает, соответствующий блок в карточке скрывается.
-*/
+map.insertBefore(renderCard(offers[0]), document.querySelector(`.map__filters-container`));
