@@ -1,5 +1,6 @@
 'use strict';
 
+// Глобальные константы
 const OFFERS_QUANTITY = 8;
 const APARTMENT_TYPES = [
   `palace`,
@@ -32,6 +33,7 @@ const VOCABULARY = {
   palace: `Дворец`
 };
 
+// Простейшие функции
 const formatNumber = (num) => num > 9 ? num : `0${num}`;
 
 function getRandomNumber(min, max) {
@@ -46,7 +48,15 @@ const getRandomsFromArray = (array) => array.filter(() => {
   return Math.random() > 0.5;
 });
 
-function createOfferMok(n) {
+// Функции для генерации похожих объявлений
+const pinTemplate = document.querySelector(`#pin`)
+  .content.querySelector(`.map__pin`);
+const cardTemplate = document.querySelector(`#card`)
+    .content.querySelector(`.map__card`);
+const map = document.querySelector(`.map`);
+const mapPins = document.querySelector(`.map__pins`);
+
+function createOfferMock(n) {
   const locX = getRandomNumber(31, 1169);
   const locY = getRandomNumber(130, 630);
   const roomsAmount = {
@@ -65,7 +75,7 @@ function createOfferMok(n) {
     offer: {
       title: `Заголовок предложения`,
       address: `${locX}, ${locY}`,
-      price: getRandomNumber(10, 120) * 1000,
+      price: getRandomNumber(0, 1000) * 1000,
       type: getRandomFromArray(APARTMENT_TYPES),
       rooms: getRandomNumber(roomsAmount.min, roomsAmount.max),
       guests: getRandomNumber(guestsAmount.min, guestsAmount.max),
@@ -85,7 +95,7 @@ function createOfferMok(n) {
 function createOffers(amount) {
   const offers = [];
   for (let i = 0; i < amount; i++) {
-    offers.push(createOfferMok(i + 1));
+    offers.push(createOfferMock(i + 1));
   }
 
   return offers;
@@ -153,18 +163,95 @@ function createPinsList(array) {
   return fragment;
 }
 
-const pinTemplate = document.querySelector(`#pin`)
-  .content.querySelector(`.map__pin`);
-const cardTemplate = document.querySelector(`#card`)
-  .content.querySelector(`.map__card`);
-const map = document.querySelector(`.map`);
-const mapPins = document.querySelector(`.map__pins`);
+// Функции для работы с режимами страницы
+let isPageActive = false;
+const mainPin = document.querySelector(`.map__pin--main`);
+const adForm = document.querySelector(`.ad-form`);
+const fieldsets = adForm.querySelectorAll(`fieldset`);
+const addressInput = adForm.querySelector(`#address`);
+
 
 function showMap() {
   map.classList.remove(`map--faded`);
 }
-const offers = createOffers(OFFERS_QUANTITY);
-showMap();
-mapPins.appendChild(createPinsList(offers));
 
-map.insertBefore(renderCard(offers[0]), document.querySelector(`.map__filters-container`));
+function deactivateForm() {
+  for (let i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].setAttribute(`disabled`, `disabled`);
+  }
+  adForm.classList.add(`ad-form--disabled`);
+}
+
+function activateForm() {
+  for (let i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].removeAttribute(`disabled`);
+  }
+  adForm.classList.remove(`ad-form--disabled`);
+}
+
+function activatePage() {
+  if (!isPageActive) {
+    isPageActive = true;
+    showMap();
+    activateForm();
+    mapPins.appendChild(createPinsList(offers));
+  }
+}
+
+function onPinLeftClick(e) {
+  if (typeof e === `object` && e.button === 0) {
+    activatePage();
+    adressAutoComplete();
+  }
+}
+
+function adressAutoComplete() {
+  let verticalOffset = 32;
+
+  if (isPageActive) {
+    verticalOffset = 65 + 22;
+  }
+
+  let mainAdress = `${parseInt(mainPin.style.left, 10) + 32}, ${parseInt(mainPin.style.top, 10) + verticalOffset}`;
+  addressInput.value = mainAdress;
+}
+
+// Обработчики событий для смены режимов страницы
+mainPin.addEventListener(`mousedown`, onPinLeftClick);
+
+mainPin.addEventListener(`keydown`, function (evt) {
+  if (evt.key === `Enter` || evt.code === `Space`) {
+    activatePage();
+    adressAutoComplete();
+  }
+});
+
+// Функции для валидации формы
+const roomsInput = adForm.querySelector(`#room_number`);
+const guestsInput = adForm.querySelector(`#capacity`);
+
+function setGuestsValidity(input) {
+  input.addEventListener(`blur`, function () {
+    if (roomsInput.value === `100` && guestsInput.value !== `0`) {
+      guestsInput.setCustomValidity(`Этот случай не для гостей`);
+    } else if (guestsInput.value > roomsInput.value) {
+      guestsInput.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
+    } else {
+      guestsInput.setCustomValidity(``);
+    }
+
+    guestsInput.reportValidity();
+  });
+}
+
+setGuestsValidity(roomsInput);
+setGuestsValidity(guestsInput);
+
+// Вызовы
+adressAutoComplete();
+const offers = createOffers(OFFERS_QUANTITY);
+deactivateForm();
+// map.insertBefore(
+renderCard(offers[0]);
+// , document.querySelector(`.map__filters-container`)
+// );
