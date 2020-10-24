@@ -230,22 +230,23 @@ mainPin.addEventListener(`keydown`, function (evt) {
 const roomsInput = adForm.querySelector(`#room_number`);
 const guestsInput = adForm.querySelector(`#capacity`);
 
-function setGuestsValidity(input) {
-  input.addEventListener(`blur`, function () {
-    if (roomsInput.value === `100` && guestsInput.value !== `0`) {
-      guestsInput.setCustomValidity(`Этот случай не для гостей`);
-    } else if (guestsInput.value > roomsInput.value) {
-      guestsInput.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
-    } else {
-      guestsInput.setCustomValidity(``);
-    }
+function validateRooms() {
+  if (roomsInput.value === `100` && guestsInput.value !== `0`) {
+    guestsInput.setCustomValidity(`Этот случай не для гостей`);
+  } else if (roomsInput.value !== `100` && guestsInput.value === `0`) {
+    guestsInput.setCustomValidity(`Добавьте гостей`);
+  } else if (guestsInput.value > roomsInput.value) {
+    guestsInput.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
+  } else {
+    guestsInput.setCustomValidity(``);
+  }
 
-    guestsInput.reportValidity();
-  });
+  guestsInput.reportValidity();
 }
 
-setGuestsValidity(roomsInput);
-setGuestsValidity(guestsInput);
+roomsInput.addEventListener(`change`, validateRooms);
+guestsInput.addEventListener(`change`, validateRooms);
+
 
 // Вызовы
 adressAutoComplete();
