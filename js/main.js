@@ -32,8 +32,10 @@ const VOCABULARY = {
   house: `Дом`,
   palace: `Дворец`
 };
+const MAIN_PIN_DIAMETER = 65;
+const MAIN_PIN_ARROW = 22;
 
-// Простейшие функции
+// Утилиты
 const formatNumber = (num) => num > 9 ? num : `0${num}`;
 
 function getRandomNumber(min, max) {
@@ -201,18 +203,20 @@ function activatePage() {
 function onPinLeftClick(e) {
   if (typeof e === `object` && e.button === 0) {
     activatePage();
-    adressAutoComplete();
+    completeAddressInput();
   }
 }
 
-function adressAutoComplete() {
-  let verticalOffset = 32;
+function completeAddressInput() {
+  let horizontalOffset = Math.round(MAIN_PIN_DIAMETER / 2);
+  let verticalOffset = horizontalOffset;
+
 
   if (isPageActive) {
-    verticalOffset = 65 + 22;
+    verticalOffset = MAIN_PIN_DIAMETER + MAIN_PIN_ARROW;
   }
 
-  let mainAdress = `${parseInt(mainPin.style.left, 10) + 32}, ${parseInt(mainPin.style.top, 10) + verticalOffset}`;
+  let mainAdress = `${parseInt(mainPin.style.left, 10) + horizontalOffset}, ${parseInt(mainPin.style.top, 10) + verticalOffset}`;
   addressInput.value = mainAdress;
 }
 
@@ -222,7 +226,7 @@ mainPin.addEventListener(`mousedown`, onPinLeftClick);
 mainPin.addEventListener(`keydown`, function (evt) {
   if (evt.key === `Enter` || evt.code === `Space`) {
     activatePage();
-    adressAutoComplete();
+    completeAddressInput();
   }
 });
 
@@ -230,7 +234,7 @@ mainPin.addEventListener(`keydown`, function (evt) {
 const roomsInput = adForm.querySelector(`#room_number`);
 const guestsInput = adForm.querySelector(`#capacity`);
 
-function validateRooms() {
+function validateGuests() {
   if (roomsInput.value === `100` && guestsInput.value !== `0`) {
     guestsInput.setCustomValidity(`Этот случай не для гостей`);
   } else if (roomsInput.value !== `100` && guestsInput.value === `0`) {
@@ -244,12 +248,12 @@ function validateRooms() {
   guestsInput.reportValidity();
 }
 
-roomsInput.addEventListener(`change`, validateRooms);
-guestsInput.addEventListener(`change`, validateRooms);
+roomsInput.addEventListener(`change`, validateGuests);
+guestsInput.addEventListener(`change`, validateGuests);
 
 
 // Вызовы
-adressAutoComplete();
+completeAddressInput();
 const offers = createOffers(OFFERS_QUANTITY);
 deactivateForm();
 // map.insertBefore(
