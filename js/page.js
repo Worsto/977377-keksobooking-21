@@ -1,9 +1,8 @@
 'use strict';
 
-window.page = {
-  isPageActive: false,
+(function () {
 
-  activatePage() {
+  function activatePage() {
     if (!window.page.isPageActive) {
       window.page.isPageActive = true;
       window.map.showMap();
@@ -11,5 +10,12 @@ window.page = {
       window.map.mapPins.appendChild(window.data.createPinsList(window.data.offers));
     }
   }
-};
 
+  let isPageActive = false;
+
+  window.page = {
+    isPageActive,
+    activatePage
+  };
+
+})();

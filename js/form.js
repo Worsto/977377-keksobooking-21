@@ -1,40 +1,37 @@
 "use strict";
 
 (function () {
+  const adForm = document.querySelector(`.ad-form`);
+  const fieldsets = adForm.querySelectorAll(`fieldset`);
+  const roomsInput = adForm.querySelector(`#room_number`);
+  const guestsInput = adForm.querySelector(`#capacity`);
+  const addressInput = adForm.querySelector(`#address`);
 
-  window.form = {
-    adForm: document.querySelector(`.ad-form`),
-    deactivateForm() {
-      for (let i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].setAttribute(`disabled`, `disabled`);
-      }
-      window.form.adForm.classList.add(`ad-form--disabled`);
-    },
-    activateForm() {
-      for (let i = 0; i < fieldsets.length; i++) {
-        fieldsets[i].removeAttribute(`disabled`);
-      }
-      window.form.adForm.classList.remove(`ad-form--disabled`);
-    },
-    completeAddressInput() {
-      let horizontalOffset = Math.round(window.pin.MAIN_PIN_DIAMETER / 2);
-      let verticalOffset = horizontalOffset;
-
-      if (window.page.isPageActive) {
-        verticalOffset = window.pin.MAIN_PIN_DIAMETER + window.pin.MAIN_PIN_ARROW;
-      }
-
-      let mainAdress = `${parseInt(window.pin.mainPin.style.left, 10) + horizontalOffset}, ${parseInt(window.pin.mainPin.style.top, 10) + verticalOffset}`;
-      addressInput.value = mainAdress;
+  function deactivateForm() {
+    for (let i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].setAttribute(`disabled`, `disabled`);
     }
-  };
+    adForm.classList.add(`ad-form--disabled`);
+  }
 
-  const fieldsets = window.form.adForm.querySelectorAll(`fieldset`);
-  const roomsInput = window.form.adForm.querySelector(`#room_number`);
-  const guestsInput = window.form.adForm.querySelector(`#capacity`);
-  const addressInput = window.form.adForm.querySelector(`#address`);
+  function activateForm() {
+    for (let i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].removeAttribute(`disabled`);
+    }
+    adForm.classList.remove(`ad-form--disabled`);
+  }
 
-  window.form.completeAddressInput();
+  function completeAddressInput() {
+    let horizontalOffset = Math.round(window.pin.mainPinDiameter / 2);
+    let verticalOffset = horizontalOffset;
+
+    if (window.page.isPageActive) {
+      verticalOffset = window.pin.mainPinDiameter + window.pin.mainPinArrow;
+    }
+
+    let mainAdress = `${parseInt(window.pin.mainPin.style.left, 10) + horizontalOffset}, ${parseInt(window.pin.mainPin.style.top, 10) + verticalOffset}`;
+    addressInput.value = mainAdress;
+  }
 
   function validateGuests() {
     if (roomsInput.value === `100` && guestsInput.value !== `0`) {
@@ -52,6 +49,11 @@
 
   roomsInput.addEventListener(`change`, validateGuests);
   guestsInput.addEventListener(`change`, validateGuests);
-  window.form.deactivateForm();
+
+  window.form = {
+    deactivateForm,
+    activateForm,
+    completeAddressInput
+  };
 
 })();

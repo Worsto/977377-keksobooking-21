@@ -31,7 +31,6 @@
   const pinTemplate = document.querySelector(`#pin`)
   .content.querySelector(`.map__pin`);
 
-
   function createOfferMock(n) {
     const locX = window.util.getRandomNumber(31, 1169);
     const locY = window.util.getRandomNumber(130, 630);
@@ -87,31 +86,39 @@
     return pinElement;
   }
 
-  window.data = {
-    offers: createOffers(OFFERS_QUANTITY),
-    createPinsList(array) {
-      const fragment = document.createDocumentFragment();
-      for (let i = 0; i < array.length; i++) {
-        fragment.appendChild(renderPin(array[i]));
-      }
+  const offers = createOffers(OFFERS_QUANTITY);
 
-      return fragment;
-    },
-    createFeature(feature) {
-      const listItem = document.createElement(`li`);
-      listItem.classList.add(`popup__feature`);
-      listItem.classList.add(`popup__feature--${feature}`);
-
-      return listItem;
-    },
-    createList(func, array) {
-      let list = document.createDocumentFragment();
-      for (let i = 0; i < array.length; i++) {
-        list.appendChild(func(array[i]));
-      }
-
-      return list;
+  function createPinsList(array) {
+    const fragment = document.createDocumentFragment();
+    for (let i = 0; i < array.length; i++) {
+      fragment.appendChild(renderPin(array[i]));
     }
+
+    return fragment;
+  }
+
+  function createFeature(feature) {
+    const listItem = document.createElement(`li`);
+    listItem.classList.add(`popup__feature`);
+    listItem.classList.add(`popup__feature--${feature}`);
+
+    return listItem;
+  }
+
+  function createList(func, array) {
+    let list = document.createDocumentFragment();
+    for (let i = 0; i < array.length; i++) {
+      list.appendChild(func(array[i]));
+    }
+
+    return list;
+  }
+
+  window.data = {
+    offers,
+    createPinsList,
+    createFeature,
+    createList
   };
 
 })();

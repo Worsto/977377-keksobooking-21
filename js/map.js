@@ -3,12 +3,15 @@
 (function () {
 
   const map = document.querySelector(`.map`);
+  const mapPins = map.querySelector(`.map__pins`);
+
+  function showMap() {
+    map.classList.remove(`map--faded`);
+  }
 
   window.map = {
-    mapPins: map.querySelector(`.map__pins`),
-    showMap() {
-      map.classList.remove(`map--faded`);
-    }
+    mapPins,
+    showMap
   };
 
   // map.insertBefore(
