@@ -15,10 +15,7 @@
     return pinElement;
   }
 
-  const OFFERS_QUANTITY = 8;
-  const offers = window.createOffers(OFFERS_QUANTITY);
-
-  function createPinsList(array) {
+  window.createPins = function (array) {
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < array.length; i++) {
       let pin = renderPin(array[i]);
@@ -27,30 +24,6 @@
     }
 
     return fragment;
-  }
-
-  function createFeature(feature) {
-    const listItem = document.createElement(`li`);
-    listItem.classList.add(`popup__feature`);
-    listItem.classList.add(`popup__feature--${feature}`);
-
-    return listItem;
-  }
-
-  function createList(func, array) {
-    let list = document.createDocumentFragment();
-    for (let i = 0; i < array.length; i++) {
-      list.appendChild(func(array[i]));
-    }
-
-    return list;
-  }
-
-  window.data = {
-    offers,
-    createPinsList,
-    createFeature,
-    createList
   };
 
 })();

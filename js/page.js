@@ -7,7 +7,7 @@
       window.page.isPageActive = true;
       window.map.showMap();
       window.form.activateForm();
-      window.map.mapPins.appendChild(window.data.createPinsList(window.data.offers));
+      window.map.mapPins.appendChild(window.createPins(window.offers));
     }
   }
 

@@ -3,7 +3,7 @@
 (function () {
 
   const map = document.querySelector(`.map`);
-  const mapPins = document.querySelector(`.map__pins`);
+  const mapPins = map.querySelector(`.map__pins`);
 
   function showMap() {
     map.classList.remove(`map--faded`);

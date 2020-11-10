@@ -63,7 +63,7 @@
     };
   }
 
-  window.createOffers = function (amount) {
+  const createOffers = function (amount = 8) {
     const offers = [];
     for (let i = 0; i < amount; i++) {
       offers.push(createOfferMock(i + 1));
@@ -71,6 +71,8 @@
 
     return offers;
   };
+
+  window.offers = createOffers();
 
 })();
 
