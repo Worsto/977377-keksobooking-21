@@ -9,6 +9,7 @@
     palace: `Дворец`
   };
 
+  const map = document.querySelector(`.map`);
   const cardTemplate = document.querySelector(`#card`)
     .content.querySelector(`.map__card`);
 
@@ -49,21 +50,23 @@
     return cardElement;
   }
 
-  let offerPin = ``;
-  let isCardOpen = false;
+  function getNumberOfId(element) {
+    if (element === null) {
+      return undefined;
+    }
+    return parseInt(element.id.replace(/\D+/g, ``), 10);
+  }
 
   function closeCard() {
-    if (isCardOpen) {
-      document.querySelector(`.map__card`).remove();
-      offerPin.classList.remove(`map__pin--active`);
-      offerPin = ``;
-      isCardOpen = false;
+    if (map.querySelector(`.map__card`)) {
+      map.querySelector(`#pin-${getNumberOfId(map.querySelector(`.map__card`))}`).classList.remove(`map__pin--active`);
+      map.querySelector(`.map__card`).remove();
     }
   }
 
   function activateCloseButton() {
-    if (isCardOpen) {
-      const closeButton = document.querySelector(`.map__card .popup__close`);
+    if (map.querySelector(`.map__card`)) {
+      const closeButton = map.querySelector(`.map__card .popup__close`);
       closeButton.addEventListener(`click`, closeCard);
     }
   }
@@ -81,26 +84,28 @@
 
   function createCard(number) {
     const card = renderCard(window.offers[number]);
-    window.map.map.insertBefore(card, document.querySelector(`.map__filters-container`));
-    isCardOpen = true;
+    card.id = `card-${number}`;
+    map.insertBefore(card, map.querySelector(`.map__filters-container`));
   }
 
   function interateWithPin(evt) {
     if (evt.target.closest(`.map__pin`) && !evt.target.closest(`.map__pin--main`)) {
-      if (offerPin === evt.target.closest(`.map__pin`) && isCardOpen) {
+      let activePin = evt.target.closest(`.map__pin`);
+      if (getNumberOfId(activePin) === getNumberOfId(map.querySelector(`.map__card`))) {
         closeCard();
         return;
       }
       closeCard();
-      offerPin = evt.target.closest(`.map__pin`);
-      markActivePin(offerPin);
-      createCard(parseInt(offerPin.id[4], 10));
+      markActivePin(activePin);
+      createCard(getNumberOfId(activePin));
       activateCloseButton();
       document.addEventListener(`keydown`, onPopupEscPress);
     }
   }
 
-  const mapPins = document.querySelector(`.map__pins`);
+  const mapPins = map.querySelector(`.map__pins`);
   mapPins.addEventListener(`click`, interateWithPin);
+
+  window.closeCard = closeCard;
 
 })();

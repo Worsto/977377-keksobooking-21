@@ -34,9 +34,12 @@
     }
 
     let mainPinX = parseInt(window.pin.mainPin.style.left, 10) + horizontalOffset;
-    let MainPinY = parseInt(window.pin.mainPin.style.top, 10) + verticalOffset;
+    let mainPinY = parseInt(window.pin.mainPin.style.top, 10) + verticalOffset;
 
-    let mainAdress = `${mainPinX}, ${MainPinY}`;
+    // window.mainPinX = mainPinX;
+    // window.mainPinY = mainPinY;
+
+    let mainAdress = `${mainPinX}, ${mainPinY}`;
     addressInput.value = mainAdress;
   }
 
@@ -93,8 +96,8 @@
     guestsInput.reportValidity();
   }
 
-  const typeField = document.querySelector(`#type`);
-  const priceField = document.querySelector(`#price`);
+  const typeField = adForm.querySelector(`#type`);
+  const priceField = adForm.querySelector(`#price`);
   const minPrice = 1000;
 
   function validateApartmentType() {
@@ -164,6 +167,7 @@
 
   // вывод вовне
   window.form = {
+    adForm,
     deactivateForm,
     activateForm,
     completeAddressInput,

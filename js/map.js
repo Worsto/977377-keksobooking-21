@@ -10,7 +10,7 @@
   }
 
   window.map = {
-    map,
+    mapSection: map,
     mapPins,
     showMap
   };
