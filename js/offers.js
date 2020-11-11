@@ -72,7 +72,7 @@
     return offers;
   };
 
-  window.offers = createOffers();
+  window.createOffers = createOffers;
 
 })();
 

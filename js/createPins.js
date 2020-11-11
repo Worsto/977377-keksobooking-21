@@ -7,8 +7,10 @@
 
   function renderPin(element) {
     const pinElement = pinTemplate.cloneNode(true);
+    const pinWidth = 50;
+    const pinHeight = 70;
 
-    pinElement.setAttribute(`style`, `left: ${element.location.x - 25}px; top: ${element.location.y - 35}px;`);
+    pinElement.setAttribute(`style`, `left: ${element.location.x - pinWidth / 2}px; top: ${element.location.y - pinHeight}px;`);
     pinElement.querySelector(`img`).setAttribute(`src`, element.author.avatar);
     pinElement.querySelector(`img`).setAttribute(`alt`, element.offer.title);
 

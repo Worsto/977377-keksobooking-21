@@ -78,7 +78,6 @@
 
   const submitButton = adForm.querySelector(`.ad-form__submit`);
 
-
   const roomsInput = adForm.querySelector(`#room_number`);
   const guestsInput = adForm.querySelector(`#capacity`);
 
@@ -138,9 +137,6 @@
   function completeTimeInput(userChange, autoChange) {
     autoChange.value = userChange.value;
   }
-
-  // ********песочница
-  // ************песочница
 
   // обработчики
   priceField.addEventListener(`input`, clearPriceField);

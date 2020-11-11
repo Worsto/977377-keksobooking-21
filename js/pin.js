@@ -6,8 +6,7 @@
   const mainPin = map.querySelector(`.map__pin--main`);
 
   // перетаскивание
-  mainPin.addEventListener(`mousedown`, function (evt) {
-    evt.preventDefault();
+  function dragMainPin(evt) {
     window.closeCard();
 
     let startCoords = {
@@ -30,6 +29,8 @@
       };
 
       mainPin.style.left = (mainPin.offsetLeft - shift.x) + `px`;
+
+
       mainPin.style.top = (mainPin.offsetTop - shift.y) + `px`;
 
     };
@@ -42,12 +43,13 @@
     };
     document.addEventListener(`mousemove`, onMouseMove);
     document.addEventListener(`mouseup`, onMouseUp);
-  });
+  }
   // перетаскивание
 
   function onPinLeftClick(e) {
     if (typeof e === `object` && e.button === 0) {
       window.page.activatePage();
+      dragMainPin(e);
     }
   }
 

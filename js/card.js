@@ -9,7 +9,7 @@
     palace: `Дворец`
   };
 
-  const map = document.querySelector(`.map`);
+  const map = window.map.mapSection;
   const cardTemplate = document.querySelector(`#card`)
     .content.querySelector(`.map__card`);
 
@@ -88,7 +88,7 @@
     map.insertBefore(card, map.querySelector(`.map__filters-container`));
   }
 
-  function interateWithPin(evt) {
+  function interateWithPins(evt) {
     if (evt.target.closest(`.map__pin`) && !evt.target.closest(`.map__pin--main`)) {
       let activePin = evt.target.closest(`.map__pin`);
       if (getNumberOfId(activePin) === getNumberOfId(map.querySelector(`.map__card`))) {
@@ -104,7 +104,7 @@
   }
 
   const mapPins = map.querySelector(`.map__pins`);
-  mapPins.addEventListener(`click`, interateWithPin);
+  mapPins.addEventListener(`click`, interateWithPins);
 
   window.closeCard = closeCard;
 
