@@ -4,34 +4,46 @@
 
   const map = window.map.mapSection;
   const mainPin = map.querySelector(`.map__pin--main`);
+  const mapRectangle = window.map.mapPins;
+  const mainPinDiameter = 65;
+  const mainPinArrow = 22;
+  const mainPinHeight = mainPinDiameter + mainPinArrow;
 
   // перетаскивание
   function dragMainPin(evt) {
     window.closeCard();
 
-    let startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
+    let shift = {
+      x: evt.clientX - mainPin.getBoundingClientRect().left,
+      y: evt.clientY - mainPin.getBoundingClientRect().top
     };
 
     const onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       window.form.completeAddressInput();
 
-      let shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
+      let newLeft = moveEvt.clientX - shift.x - mapRectangle.getBoundingClientRect().left;
+      let newTop = moveEvt.clientY - shift.y - mapRectangle.getBoundingClientRect().top;
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      if (newLeft < 0) {
+        newLeft = 0;
+      }
 
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + `px`;
+      let rightEdge = mapRectangle.offsetWidth - mainPin.offsetWidth;
 
+      if (newLeft > rightEdge) {
+        newLeft = rightEdge;
+      }
 
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + `px`;
+      if (newTop < window.mapBorders.top - mainPinHeight) {
+        newTop = window.mapBorders.top - mainPinHeight;
+      }
+      if (newTop > window.mapBorders.bottom - mainPinHeight) {
+        newTop = window.mapBorders.bottom - mainPinHeight;
+      }
+
+      mainPin.style.left = newLeft + `px`;
+      mainPin.style.top = newTop + `px`;
 
     };
 
@@ -63,8 +75,8 @@
   });
 
   window.pin = {
-    mainPinDiameter: 65,
-    mainPinArrow: 22,
+    mainPinDiameter,
+    mainPinArrow,
     mainPin
   };
 

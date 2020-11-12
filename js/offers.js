@@ -25,11 +25,17 @@
     `http://o0.github.io/assets/images/tokyo/hotel2.jpg`,
     `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
   ];
+  const mapBorders = {
+    top: 130,
+    bottom: 630
+  };
+  const pinWidth = 50;
+  const mapWidth = 1200;
 
 
   function createOfferMock(n) {
-    const locX = window.util.getRandomNumber(31, 1169);
-    const locY = window.util.getRandomNumber(130, 630);
+    const locX = window.util.getRandomNumber(pinWidth / 2, mapWidth - pinWidth / 2);
+    const locY = window.util.getRandomNumber(mapBorders.top, mapBorders.bottom);
     const roomsAmount = {
       min: 1,
       max: 4
@@ -73,6 +79,7 @@
   };
 
   window.createOffers = createOffers;
+  window.mapBorders = mapBorders;
 
 })();
 
