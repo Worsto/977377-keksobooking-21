@@ -20,11 +20,21 @@
     });
   }
 
+  function createList(func, array) {
+    let list = document.createDocumentFragment();
+    for (let i = 0; i < array.length; i++) {
+      list.appendChild(func(array[i]));
+    }
+
+    return list;
+  }
+
   window.util = {
     formatNumber,
     getRandomNumber,
     getRandomFromArray,
-    getRandomsFromArray
+    getRandomsFromArray,
+    createList
   };
 
 })();
