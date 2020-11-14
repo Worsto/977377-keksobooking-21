@@ -1,9 +1,9 @@
 'use strict';
 
 (function () {
-  function init2DSlider(evt, element, field, elementHeight = element.offsetHeight, fieldTop = 0, FieldBottom = field.offsetHeight, mouseDownFunction = undefined, mouseMoveFunction = undefined) {
-    if (mouseDownFunction) {
-      mouseDownFunction();
+  function init2DSlider(evt, element, field, functions = undefined) {
+    if (functions.onDown) {
+      functions.onDown();
     }
 
     let shift = {
@@ -13,8 +13,8 @@
 
     const onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      if (mouseMoveFunction) {
-        mouseMoveFunction();
+      if (functions.onMove) {
+        functions.onMove();
       }
 
       let newLeft = moveEvt.clientX - shift.x - field.getBoundingClientRect().left;
@@ -30,11 +30,11 @@
         newLeft = rightEdge;
       }
 
-      if (newTop < fieldTop - elementHeight) {
-        newTop = fieldTop - elementHeight;
+      if (newTop < field.topBorder - element.height) {
+        newTop = field.topBorder - element.height;
       }
-      if (newTop > FieldBottom - elementHeight) {
-        newTop = FieldBottom - elementHeight;
+      if (newTop > field.bottomBorder - element.height) {
+        newTop = field.bottomBorder - element.height;
       }
 
       element.style.left = newLeft + `px`;

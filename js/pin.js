@@ -5,14 +5,19 @@
   const map = window.map.mapSection;
   const mainPin = map.querySelector(`.map__pin--main`);
   const mapRectangle = window.map.mapPins;
-  const mainPinDiameter = 65;
-  const mainPinArrow = 22;
-  const mainPinHeight = mainPinDiameter + mainPinArrow;
+  mainPin.arrow = 22;
+  mainPin.height = mainPin.offsetWidth + mainPin.arrow;
+
+  const pinFunctions = {
+    onDown: window.closeCard,
+    onMove: window.form.completeAddressInput
+  };
+
 
   function onPinLeftClick(e) {
     if (typeof e === `object` && e.button === 0) {
       window.page.activatePage();
-      window.init2DSlider(e, mainPin, mapRectangle, mainPinHeight, window.mapBorders.top, window.mapBorders.bottom, window.closeCard, window.form.completeAddressInput);
+      window.init2DSlider(e, mainPin, mapRectangle, pinFunctions);
     }
   }
 
@@ -25,10 +30,6 @@
     }
   });
 
-  window.pin = {
-    mainPinDiameter,
-    mainPinArrow,
-    mainPin
-  };
+  window.mainPin = mainPin;
 
 })();
