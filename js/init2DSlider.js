@@ -1,8 +1,10 @@
 'use strict';
 
 (function () {
-  function init2DSlider(evt, element, field, elementHeight, fieldTop, FieldBottom, mouseDownFunction, mouseMoveFunction) {
-    mouseDownFunction();
+  function init2DSlider(evt, element, field, elementHeight = element.offsetHeight, fieldTop = 0, FieldBottom = field.offsetHeight, mouseDownFunction = undefined, mouseMoveFunction = undefined) {
+    if (mouseDownFunction) {
+      mouseDownFunction();
+    }
 
     let shift = {
       x: evt.clientX - element.getBoundingClientRect().left,
@@ -11,7 +13,9 @@
 
     const onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
-      mouseMoveFunction();
+      if (mouseMoveFunction) {
+        mouseMoveFunction();
+      }
 
       let newLeft = moveEvt.clientX - shift.x - field.getBoundingClientRect().left;
       let newTop = moveEvt.clientY - shift.y - field.getBoundingClientRect().top;
