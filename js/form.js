@@ -26,18 +26,15 @@
   }
 
   function completeAddressInput() {
-    let horizontalOffset = Math.round(window.pin.mainPinDiameter / 2);
+    let horizontalOffset = Math.round(window.mainPin.offsetWidth / 2);
     let verticalOffset = horizontalOffset;
 
     if (window.page.isPageActive) {
-      verticalOffset = window.pin.mainPinDiameter + window.pin.mainPinArrow;
+      verticalOffset = window.mainPin.offsetWidth + window.mainPin.arrow;
     }
 
-    let mainPinX = parseInt(window.pin.mainPin.style.left, 10) + horizontalOffset;
-    let mainPinY = parseInt(window.pin.mainPin.style.top, 10) + verticalOffset;
-
-    // window.mainPinX = mainPinX;
-    // window.mainPinY = mainPinY;
+    let mainPinX = parseInt(window.mainPin.style.left, 10) + horizontalOffset;
+    let mainPinY = parseInt(window.mainPin.style.top, 10) + verticalOffset;
 
     let mainAdress = `${mainPinX}, ${mainPinY}`;
     addressInput.value = mainAdress;
