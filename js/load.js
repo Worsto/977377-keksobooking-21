@@ -2,7 +2,7 @@
 
 
 (function () {
-  window.load = function (url, onSuccess, onError) {
+  const load = function (url, onSuccessFunc, onErrorFunc) {
     let xhr = new XMLHttpRequest();
 
     xhr.responseType = `json`;
@@ -11,7 +11,7 @@
       let error;
       switch (xhr.status) {
         case 200:
-          onSuccess(xhr.response);
+          onSuccessFunc(xhr.response);
           break;
 
         case 400:
@@ -29,16 +29,16 @@
       }
 
       if (error) {
-        onError(error);
+        onErrorFunc(error);
       }
     });
 
     xhr.addEventListener(`error`, function () {
-      onError(`Произошла ошибка соединения`);
+      onErrorFunc(`Произошла ошибка соединения`);
     });
 
     xhr.addEventListener(`timeout`, function () {
-      onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
+      onErrorFunc(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
 
     xhr.timeout = 10000; // 10s
@@ -47,7 +47,7 @@
     xhr.send();
   };
 
-  window.onError = function (errorMessage) {
+  function onError(errorMessage) {
     let node = document.createElement(`div`);
     node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: tomato;`;
     node.style.position = `absolute`;
@@ -57,10 +57,14 @@
 
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
-  };
+  }
 
-  window.onSuccess = function (data) {
+  function onSuccess(data) {
     window.offers = data;
+  }
+
+  window.loadOffers = function (url) {
+    load(url, onSuccess, onError);
   };
 
 })();
