@@ -4,9 +4,9 @@
 
   const map = window.map.mapSection;
   const mainPin = map.querySelector(`.map__pin--main`);
-  const mapRectangle = window.map.mapPins;
   mainPin.arrow = 22;
   mainPin.height = mainPin.offsetWidth + mainPin.arrow;
+  const mapRectangle = window.map.mapPins;
 
   const pinFunctions = {
     onDown: window.closeCard,
