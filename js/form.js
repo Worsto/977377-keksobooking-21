@@ -4,12 +4,19 @@
   // функции
   const adForm = document.querySelector(`.ad-form`);
   const fieldsets = adForm.querySelectorAll(`fieldset`);
+  const resetButton = adForm.querySelector(`.ad-form__reset`);
 
   function deactivateForm() {
     for (let i = 0; i < fieldsets.length; i++) {
       fieldsets[i].disabled = true;
     }
+    resetForm();
     adForm.classList.add(`ad-form--disabled`);
+  }
+
+  function resetForm() {
+    adForm.reset();
+    completeAddressInput();
   }
 
   function activateForm() {
@@ -22,7 +29,7 @@
   const addressInput = adForm.querySelector(`#address`);
 
   function disableAdressInput() {
-    addressInput.disabled = true;
+    addressInput.setAttribute(`readonly`, `readonly`);
   }
 
   function completeAddressInput() {
@@ -52,6 +59,7 @@
 
   function validateTitle() {
     const valueLength = OfferTitle.value.length;
+    let marker = false;
 
     if (valueLength === 0) {
       OfferTitle.setCustomValidity(`Обязательное поле`);
@@ -61,11 +69,13 @@
       OfferTitle.setCustomValidity(`Удалите лишние ` + (valueLength - maxTitleLength) + ` симв.`);
     } else {
       OfferTitle.setCustomValidity(``);
+      marker = true;
     }
 
+    OfferTitle.addEventListener(`input`, clearTitleValidity);
     OfferTitle.reportValidity();
 
-    OfferTitle.addEventListener(`input`, clearTitleValidity);
+    return marker;
   }
 
   function clearTitleValidity() {
@@ -73,12 +83,12 @@
     OfferTitle.removeEventListener(`input`, clearTitleValidity);
   }
 
-  const submitButton = adForm.querySelector(`.ad-form__submit`);
-
   const roomsInput = adForm.querySelector(`#room_number`);
   const guestsInput = adForm.querySelector(`#capacity`);
 
   function validateGuests() {
+    let marker = false;
+
     if (roomsInput.value === `100` && guestsInput.value !== `0`) {
       guestsInput.setCustomValidity(`Этот случай не для гостей`);
     } else if (roomsInput.value !== `100` && guestsInput.value === `0`) {
@@ -87,44 +97,57 @@
       guestsInput.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
     } else {
       guestsInput.setCustomValidity(``);
+      marker = true;
     }
 
     guestsInput.reportValidity();
+    return marker;
   }
 
   const typeField = adForm.querySelector(`#type`);
   const priceField = adForm.querySelector(`#price`);
-  const minPrice = 1000;
+
 
   function validateApartmentType() {
-    if (typeField.value === `bungalow`) {
-      priceField.placeholder = `0`;
-      minPrice = 0;
-    } else if (typeField.value === `flat`) {
-      priceField.placeholder = `1000`;
-      priceField.setCustomValidity(`Цена за квартиру должна начинаться от 1 000`);
-      minPrice = 1000;
-    } else if (typeField.value === `house`) {
-      priceField.placeholder = `5000`;
-      priceField.setCustomValidity(`Цена за дом должна начинаться от 5 000`);
-      minPrice = 5000;
-    } else if (typeField.value === `palace`) {
-      priceField.placeholder = `10000`;
-      priceField.setCustomValidity(`Цена за дворец должна начинаться от 10 000`);
-      minPrice = 10000;
+    const apartmentTypeData = {
+      bungalow: {
+        caseName: `Бунгало`,
+        minPrice: 0
+      },
+      flat: {
+        caseName: `Квартиры`,
+        minPrice: 1000
+      },
+      house: {
+        caseName: `Дома`,
+        minPrice: 5000
+      },
+      palace: {
+        caseName: `Дворца`,
+        minPrice: 10000
+      }
+    };
+    let marker = false;
+    if (validateTitle()) {
+      if (priceField.value === ``) {
+        priceField.setCustomValidity(`Укажите цену`);
+      } else if (parseInt(priceField.value, 10) > 1000000) {
+        priceField.setCustomValidity(`Цена слишком высока`);
+      }
+
+      if (priceField.value < apartmentTypeData[typeField.value].minPrice) {
+        priceField.setCustomValidity(`Минимальная цена за аренду ${apartmentTypeData[typeField.value].caseName} ${apartmentTypeData[typeField.value].minPrice}`);
+      } else {
+        clearPriceValidity();
+        marker = true;
+      }
+
+      priceField.reportValidity();
     }
+    return marker;
   }
 
-  function validatePrice() {
-    if (parseInt(priceField.value, 10) >= minPrice) {
-      priceField.setCustomValidity(``);
-    }
-    if (parseInt(priceField.value, 10) > 1000000) {
-      priceField.setCustomValidity(`Цена слишком высока`);
-    }
-  }
-
-  function clearPriceField() {
+  function clearPriceValidity() {
     priceField.setCustomValidity(``);
   }
 
@@ -136,7 +159,7 @@
   }
 
   // обработчики
-  priceField.addEventListener(`input`, clearPriceField);
+  priceField.addEventListener(`input`, clearPriceValidity);
 
   typeField.addEventListener(`change`, validateApartmentType);
 
@@ -152,15 +175,25 @@
   roomsInput.addEventListener(`change`, validateGuests);
   guestsInput.addEventListener(`change`, validateGuests);
 
-  submitButton.addEventListener(`click`, function () {
+  adForm.addEventListener(`submit`, function (evt) {
+    evt.preventDefault();
     validateTitle();
     validateApartmentType();
-    validatePrice();
+    if (validateTitle() && validateGuests() && validateApartmentType()) {
+      const formData = new FormData(adForm);
+      window.upload(`https://21.javascript.pages.academy/keksobooking`, formData);
+      window.page.deactivatePage();
+    }
   });
 
+  resetButton.addEventListener(`click`, function (evt) {
+    evt.preventDefault();
+    resetForm();
+  });
   // вывод вовне
   window.form = {
     adForm,
+    resetForm,
     deactivateForm,
     activateForm,
     completeAddressInput,

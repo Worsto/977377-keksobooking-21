@@ -12,10 +12,15 @@
     map.classList.remove(`map--faded`);
   }
 
+  function hideMap() {
+    map.classList.add(`map--faded`);
+  }
+
   window.map = {
     mapSection: map,
     mapPins,
-    showMap
+    showMap,
+    hideMap
   };
 
 

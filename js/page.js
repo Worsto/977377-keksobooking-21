@@ -6,8 +6,19 @@
     if (!window.page.isPageActive) {
       window.page.isPageActive = true;
       window.map.showMap();
+      window.form.completeAddressInput();
       window.form.activateForm();
       window.map.mapPins.appendChild(window.createPins(window.offers));
+    }
+  }
+
+  function deactivatePage() {
+    if (window.page.isPageActive) {
+      window.page.isPageActive = false;
+      window.map.hideMap();
+      window.mainPin.returnToCenter();
+      window.removePins();
+      window.form.deactivateForm();
     }
   }
 
@@ -15,7 +26,8 @@
 
   window.page = {
     isPageActive,
-    activatePage
+    activatePage,
+    deactivatePage
   };
 
 })();

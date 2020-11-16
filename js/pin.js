@@ -8,6 +8,11 @@
   mainPin.height = mainPin.offsetWidth + mainPin.arrow;
   const mapRectangle = window.map.mapPins;
 
+  mainPin.returnToCenter = function () {
+    mainPin.style.left = `570px`;
+    mainPin.style.top = `375px`;
+  };
+
   const pinFunctions = {
     onDown: window.closeCard,
     onMove: window.form.completeAddressInput
