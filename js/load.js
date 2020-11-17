@@ -60,6 +60,7 @@
   }
 
   function onSuccess(data) {
+    window.enableFilterForm();
     window.offers = data;
   }
 

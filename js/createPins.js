@@ -1,6 +1,7 @@
 "use strict";
 
 (function () {
+  const MAX_SHOWED_PINS = 5;
 
   const pinTemplate = document.querySelector(`#pin`)
   .content.querySelector(`.map__pin`);
@@ -18,8 +19,13 @@
   }
 
   window.createPins = function (array) {
+    const takeNumber = array.length > MAX_SHOWED_PINS
+      ? MAX_SHOWED_PINS
+      : array.length;
+
+    window.removePins();
     const fragment = document.createDocumentFragment();
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < takeNumber; i++) {
       let pin = renderPin(array[i]);
       pin.id = `pin-${i}`;
       fragment.appendChild(pin);
