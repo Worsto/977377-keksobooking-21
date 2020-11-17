@@ -73,7 +73,6 @@
     }
 
     OfferTitle.addEventListener(`input`, clearTitleValidity);
-    OfferTitle.reportValidity();
 
     return marker;
   }
@@ -133,17 +132,15 @@
         priceField.setCustomValidity(`Укажите цену`);
       } else if (parseInt(priceField.value, 10) > 1000000) {
         priceField.setCustomValidity(`Цена слишком высока`);
-      }
-
-      if (priceField.value < apartmentTypeData[typeField.value].minPrice) {
+      } else if (priceField.value < apartmentTypeData[typeField.value].minPrice) {
         priceField.setCustomValidity(`Минимальная цена за аренду ${apartmentTypeData[typeField.value].caseName} ${apartmentTypeData[typeField.value].minPrice}`);
       } else {
         clearPriceValidity();
         marker = true;
       }
-
-      priceField.reportValidity();
     }
+
+    priceField.placeholder = apartmentTypeData[typeField.value].minPrice;
     return marker;
   }
 
@@ -183,6 +180,8 @@
       const formData = new FormData(adForm);
       window.upload(`https://21.javascript.pages.academy/keksobooking`, formData);
       window.page.deactivatePage();
+    } else {
+      adForm.reportValidity();
     }
   });
 
