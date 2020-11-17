@@ -16,8 +16,9 @@
       }
     }
 
+    window.removePins();
     let newArray = window.offers.filter(function (value) {
-      return (value.offer.type === values.type);
+      return (value.offer.type === values.type || values.type === `any`);
     });
     window.map.mapPins.appendChild(window.createPins(newArray));
   };

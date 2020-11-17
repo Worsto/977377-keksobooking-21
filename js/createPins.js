@@ -23,7 +23,6 @@
       ? MAX_SHOWED_PINS
       : array.length;
 
-    window.removePins();
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < takeNumber; i++) {
       let pin = renderPin(array[i]);
