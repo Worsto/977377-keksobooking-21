@@ -92,7 +92,7 @@
       markActivePin(activePin);
       createCard(getNumberOfId(activePin));
       activateCloseButton();
-      document.addEventListener(`keydown`, window.onPopupEscPress.bind(this, evt, closeCard));
+      window.onPopupEscPress(closeCard);
     }
   }
 

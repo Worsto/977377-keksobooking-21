@@ -56,6 +56,7 @@
       buttonToTryAgain.removeEventListener(`click`, tryAgain);
     }
     buttonToTryAgain.addEventListener(`click`, tryAgain);
+    window.onPopupEscPress(removePopup);
   }
 
   function onSuccess() {
@@ -67,6 +68,7 @@
       successPopup.removeEventListener(`click`, removePopup);
     }
     successPopup.addEventListener(`click`, removePopup);
+    window.onPopupEscPress(removePopup);
   }
 })();
 
