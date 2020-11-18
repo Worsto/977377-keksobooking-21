@@ -59,7 +59,7 @@
 
   function validateTitle() {
     const valueLength = OfferTitle.value.length;
-    let marker = false;
+    let isTitleValid = false;
 
     if (valueLength === 0) {
       OfferTitle.setCustomValidity(`Обязательное поле`);
@@ -69,12 +69,12 @@
       OfferTitle.setCustomValidity(`Удалите лишние ` + (valueLength - maxTitleLength) + ` симв.`);
     } else {
       OfferTitle.setCustomValidity(``);
-      marker = true;
+      isTitleValid = true;
     }
 
     OfferTitle.addEventListener(`input`, clearTitleValidity);
 
-    return marker;
+    return isTitleValid;
   }
 
   function clearTitleValidity() {
@@ -86,7 +86,7 @@
   const guestsInput = adForm.querySelector(`#capacity`);
 
   function validateGuests() {
-    let marker = false;
+    let isGuestsValid = false;
 
     if (roomsInput.value === `100` && guestsInput.value !== `0`) {
       guestsInput.setCustomValidity(`Этот случай не для гостей`);
@@ -96,11 +96,11 @@
       guestsInput.setCustomValidity(`Количество гостей не должно превышать количество комнат`);
     } else {
       guestsInput.setCustomValidity(``);
-      marker = true;
+      isGuestsValid = true;
     }
 
     guestsInput.reportValidity();
-    return marker;
+    return isGuestsValid;
   }
 
   const typeField = adForm.querySelector(`#type`);
@@ -126,7 +126,7 @@
         minPrice: 10000
       }
     };
-    let marker = false;
+    let isPriceValid = false;
     if (validateTitle()) {
       if (priceField.value === ``) {
         priceField.setCustomValidity(`Укажите цену`);
@@ -136,12 +136,12 @@
         priceField.setCustomValidity(`Минимальная цена за аренду ${apartmentTypeData[typeField.value].caseName} ${apartmentTypeData[typeField.value].minPrice}`);
       } else {
         clearPriceValidity();
-        marker = true;
+        isPriceValid = true;
       }
     }
 
     priceField.placeholder = apartmentTypeData[typeField.value].minPrice;
-    return marker;
+    return isPriceValid;
   }
 
   function clearPriceValidity() {
@@ -174,9 +174,10 @@
 
   adForm.addEventListener(`submit`, function (evt) {
     evt.preventDefault();
-    validateTitle();
-    validateApartmentType();
-    if (validateTitle() && validateGuests() && validateApartmentType()) {
+    const isTitleValid = validateTitle();
+    const isPriceValid = validateApartmentType();
+    const isGuestsValid = validateGuests();
+    if (isTitleValid && isGuestsValid && isPriceValid) {
       const formData = new FormData(adForm);
       window.upload(`https://21.javascript.pages.academy/keksobooking`, formData);
       window.page.deactivatePage();

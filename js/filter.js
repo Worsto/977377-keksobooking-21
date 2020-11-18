@@ -16,6 +16,12 @@
       }
     }
 
+    // features: (2) ["wifi", "dishwasher"]
+    // guests: "any"
+    // price: "middle"
+    // rooms: "any"
+    // type: "palace"
+
     window.removePins();
     let newArray = window.offers.filter(function (value) {
       return (value.offer.type === values.type || values.type === `any`);
