@@ -2,6 +2,14 @@
 
 (function () {
   const form = document.querySelector(`.map__filters`);
+
+  window.resetFilterForm = function () {
+    form.reset();
+    window.offersToUse = Array.from(window.offers);
+    window.removePins();
+    window.map.mapPins.appendChild(window.createPins(window.offersToUse));
+  };
+
   const filterOffers = function () {
     window.closeCard();
     const formData = new FormData(form);

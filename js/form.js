@@ -48,7 +48,7 @@
   }
 
   // валидация
-  const OfferTitle = adForm.querySelector(`#title`);
+  const offerTitle = adForm.querySelector(`#title`);
   const minTitleLength = 30;
   const maxTitleLength = 100;
 
@@ -58,28 +58,28 @@
   }
 
   function validateTitle() {
-    const valueLength = OfferTitle.value.length;
+    const valueLength = offerTitle.value.length;
     let isTitleValid = false;
 
     if (valueLength === 0) {
-      OfferTitle.setCustomValidity(`Обязательное поле`);
+      offerTitle.setCustomValidity(`Обязательное поле`);
     } else if (valueLength < minTitleLength) {
-      OfferTitle.setCustomValidity(`Ещё ` + (minTitleLength - valueLength) + ` симв.`);
+      offerTitle.setCustomValidity(`Ещё ` + (minTitleLength - valueLength) + ` симв.`);
     } else if (valueLength > maxTitleLength) {
-      OfferTitle.setCustomValidity(`Удалите лишние ` + (valueLength - maxTitleLength) + ` симв.`);
+      offerTitle.setCustomValidity(`Удалите лишние ` + (valueLength - maxTitleLength) + ` симв.`);
     } else {
-      OfferTitle.setCustomValidity(``);
+      offerTitle.setCustomValidity(``);
       isTitleValid = true;
     }
 
-    OfferTitle.addEventListener(`input`, clearTitleValidity);
+    offerTitle.addEventListener(`input`, clearTitleValidity);
 
     return isTitleValid;
   }
 
   function clearTitleValidity() {
-    OfferTitle.setCustomValidity(``);
-    OfferTitle.removeEventListener(`input`, clearTitleValidity);
+    offerTitle.setCustomValidity(``);
+    offerTitle.removeEventListener(`input`, clearTitleValidity);
   }
 
   const roomsInput = adForm.querySelector(`#room_number`);
@@ -188,7 +188,7 @@
 
   resetButton.addEventListener(`click`, function (evt) {
     evt.preventDefault();
-    resetForm();
+    window.page.deactivatePage();
   });
   // вывод вовне
   window.form = {

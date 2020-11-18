@@ -20,11 +20,11 @@
       let newLeft = moveEvt.clientX - shift.x - field.getBoundingClientRect().left;
       let newTop = moveEvt.clientY - shift.y - field.getBoundingClientRect().top;
 
-      if (newLeft < 0) {
-        newLeft = 0;
+      if (newLeft < 0 - element.offsetWidth / 2) {
+        newLeft = 0 - element.offsetWidth / 2;
       }
 
-      let rightEdge = field.offsetWidth - element.offsetWidth;
+      let rightEdge = field.offsetWidth - element.offsetWidth / 2;
 
       if (newLeft > rightEdge) {
         newLeft = rightEdge;

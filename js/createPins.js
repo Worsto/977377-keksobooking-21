@@ -25,9 +25,11 @@
 
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < takeNumber; i++) {
-      let pin = renderPin(array[i]);
-      pin.id = `pin-${i}`;
-      fragment.appendChild(pin);
+      if (array[i].offer !== undefined) {
+        let pin = renderPin(array[i]);
+        pin.id = `pin-${i}`;
+        fragment.appendChild(pin);
+      }
     }
 
     return fragment;

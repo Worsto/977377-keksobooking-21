@@ -52,7 +52,6 @@
     const buttonToTryAgain = errorPopup.querySelector(`.error__button`);
     function tryAgain() {
       removePopup();
-      window.page.activatePage();
       buttonToTryAgain.removeEventListener(`click`, tryAgain);
     }
     buttonToTryAgain.addEventListener(`click`, tryAgain);
