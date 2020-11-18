@@ -41,7 +41,7 @@
       onErrorFunc(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
 
-    xhr.timeout = 10000; // 10s
+    xhr.timeout = 10000;
 
     xhr.open(`GET`, url);
     xhr.send();
@@ -62,6 +62,7 @@
   function onSuccess(data) {
     window.enableFilterForm();
     window.offers = data;
+    window.offersToUse = Array.from(window.offers);
   }
 
   window.loadOffers = function (url) {

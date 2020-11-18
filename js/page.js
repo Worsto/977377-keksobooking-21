@@ -8,7 +8,7 @@
       window.map.showMap();
       window.form.completeAddressInput();
       window.form.activateForm();
-      window.map.mapPins.appendChild(window.createPins(window.offers));
+      window.map.mapPins.appendChild(window.createPins(window.offersToUse));
     }
   }
 
