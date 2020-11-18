@@ -71,13 +71,6 @@
     }
   }
 
-  const onPopupEscPress = function (evt) {
-    if (evt.key === `Escape`) {
-      closeCard();
-      document.removeEventListener(`keydown`, onPopupEscPress);
-    }
-  };
-
   function markActivePin(element) {
     element.classList.add(`map__pin--active`);
   }
@@ -99,7 +92,7 @@
       markActivePin(activePin);
       createCard(getNumberOfId(activePin));
       activateCloseButton();
-      document.addEventListener(`keydown`, onPopupEscPress);
+      window.onPopupEscPress(closeCard);
     }
   }
 
